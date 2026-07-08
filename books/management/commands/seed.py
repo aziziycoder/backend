@@ -34,6 +34,9 @@ AUTHOR_BIOS = {
     'Antoine de Saint-Exupéry': 'French writer and pioneering aviator (1900–1944). "The Little Prince" is one of the most-translated books in the world.',
     'Yuval Noah Harari': 'Israeli historian and professor (b. 1976), author of the international bestsellers "Sapiens", "Homo Deus" and "21 Lessons for the 21st Century".',
     "Abdulhamid Cho'lpon": "O'zbek shoiri, yozuvchi va dramaturg (1897–1938). Yangi o'zbek she'riyatining asoschisi, \"Kecha va kunduz\" romani muallifi. Qatag'on qurboni.",
+    "O'tkir Hoshimov": "O'zbek adabiyotining yirik vakillaridan biri (1941–2013). O'zbekiston xalq yozuvchisi. Inson ruhiyatini tasvirlovchi xalqona asarlari bilan tanilgan.",
+    "Pirimqul Qodirov": "O'zbekiston xalq yozuvchisi (1928–2010), mashhur tarixiy romanlar muallifi. \"Yulduzli tunlar\" asari orqali Boburning murakkab hayot yo'lini yuksak mahorat bilan yoritgan.",
+    "G'afur G'ulom": "O'zbekiston xalq shoiri va yozuvchisi (1903–1966), o'zbek adabiyotida yumoristik qissa janrining yirik vakili.",
 }
 
 LIKES = [
@@ -173,6 +176,68 @@ BOOKS = [
             ('Miryoqub', 'Yordamchi qahramon', "Epchil va tadbirkor odam."),
         ],
     },
+    {
+        'title': "Dunyoning ishlari",
+        'author': "O'tkir Hoshimov",
+        'year': 1982, 'pages': 250,
+        'genres': ['Classic', 'Drama'],
+        'description': "O'tkir Hoshimovning eng mashhur qissasi. Har bir bob alohida hikoyalardan iborat bo'lib, ona va bola o'rtasidagi samimiy munosabatlar, mehr-oqibat va urushdan keyingi hayot tasvirlanadi.",
+        'cover': '',
+        'characters': [
+            ('Lutfi', 'Bosh qahramon', "Yozuvchining onasi timsoli, yuksak ma'naviyatli, mehribon ona."),
+        ],
+    },
+    {
+        'title': "Ikki eshik orasi",
+        'author': "O'tkir Hoshimov",
+        'year': 1986, 'pages': 450,
+        'genres': ['Classic', 'Historical', 'Drama'],
+        'description': "Urush davridagi hayotning qiyinchiliklari, insonlar taqdiri, sadoqat va xiyonat haqida so'zlovchi yirik asar.",
+        'cover': '',
+        'characters': [
+            ('Rano', 'Bosh qahramon', "Sodiq va bardoshli o'zbek ayoli."),
+            ('Muzaffar', 'Bosh qahramon', "Qiyinchiliklar bilan katta bo'lgan yosh yigit."),
+            ('Umar zakchi', 'Antagonist', "Salbiy obraz, shafqatsiz shaxs."),
+        ],
+    },
+    {
+        'title': "Yulduzli tunlar",
+        'author': "Pirimqul Qodirov",
+        'year': 1979, 'pages': 520,
+        'genres': ['Classic', 'Historical', 'Drama'],
+        'description': "Zahiriddin Muhammad Boburning murakkab hayoti, shaxsiyati va ijodiy yo'li tasvirlangan mashhur tarixiy roman.",
+        'cover': '',
+        'characters': [
+            ('Bobur', 'Bosh qahramon', "Shoh, sarkarda va buyuk shoir."),
+            ('Xonzodabegim', 'Yordamchi qahramon', "Boburning opasi, sadoqatli malika."),
+            ('Shayboniyxon', 'Antagonist', "Boburning asosiy raqibi."),
+        ],
+    },
+    {
+        'title': "Shum bola",
+        'author': "G'afur G'ulom",
+        'year': 1936, 'pages': 180,
+        'genres': ['Classic', 'Adventure', 'Drama'],
+        'description': "G'afur G'ulomning yumoristik qissasi. Yetim qolgan sho'x bolaning hayot qiyinchiliklariga chap berib yurishi hikoya qilinadi.",
+        'cover': '',
+        'characters': [
+            ('Qoravoy', 'Bosh qahramon', "Sho'x, ayyor, aql-idrokli bola."),
+            ('Sari boy', 'Yordamchi qahramon', "Baxil va ochko'z boy."),
+        ],
+    },
+    {
+        'title': "Animal Farm",
+        'author': "George Orwell",
+        'year': 1945, 'pages': 112,
+        'genres': ['Dystopia', 'Classic', 'Philosophy'],
+        'description': "A satirical allegorical novella reflecting events leading up to the Russian Revolution.",
+        'cover': 'https://covers.openlibrary.org/b/isbn/9780451526342-L.jpg?default=false',
+        'characters': [
+            ('Napoleon', 'Antagonist', "The pig who emerges as the leader of the Animal Farm."),
+            ('Snowball', 'Protagonist', "Napoleon's rival pig who is expelled from the farm."),
+            ('Boxer', 'Protagonist', "The loyal, hard-working cart-horse."),
+        ],
+    },
 ]
 
 DEMO_USERS = [
@@ -190,6 +255,11 @@ REVIEWS = [
     ('bekzod', "O'tkan kunlar", 5, "Qodiriyning tili — asal. Har bir jumlasi she'rdek o'qiladi."),
     ('aziza', 'The Alchemist', 3.5, "Orzular ortidan borish haqida ilhomlantiruvchi kitob."),
     ('javohir', 'Sapiens: A Brief History of Humankind', 5, "Insoniyat tarixiga butunlay boshqacha nazar. Fikrlashni o'zgartiradi."),
+    ('aziza', "Dunyoning ishlari", 5, "Har bir bobini yig'lamasdan o'qib bo'lmaydi. Dunyo onalari haqida eng zo'r asar."),
+    ('javohir', 'Yulduzli tunlar', 5, "Boburning ichki kechinmalarini ajoyib tarzda ko'rsatib bergan. Tarixiy asarlar ichida durdona."),
+    ('bekzod', 'Ikki eshik orasi', 5, "Qahramonlarning taqsiri juda fojiali bo'lsa-da, hayot haqiqatini ochib beradi."),
+    ('aziza', 'Shum bola', 4.5, "Ajoyib kulgi va yumor bilan yozilgan, garchi qiyin davrlar haqida bo'lsa ham."),
+    ('javohir', 'Animal Farm', 5, "Amazing critique of totalitarianism. Short but powerful."),
 ]
 
 FAVORITES = [
@@ -199,6 +269,9 @@ FAVORITES = [
     ('javohir', 'Sapiens: A Brief History of Humankind'),
     ('bekzod', 'Crime and Punishment'),
     ('bekzod', "O'tkan kunlar"),
+    ('aziza', "Dunyoning ishlari"),
+    ('javohir', 'Yulduzli tunlar'),
+    ('bekzod', 'Ikki eshik orasi'),
 ]
 
 LIST_LIKES = [
@@ -249,6 +322,12 @@ SHELF = [
     ('bekzod', "O'tkan kunlar", 'read'),
     ('bekzod', 'Mehrobdan chayon', 'reading'),
     ('bekzod', 'The Great Gatsby', 'want'),
+    ('aziza', 'Dunyoning ishlari', 'read'),
+    ('aziza', 'Ikki eshik orasi', 'want'),
+    ('javohir', 'Yulduzli tunlar', 'read'),
+    ('javohir', 'Animal Farm', 'read'),
+    ('bekzod', 'Ikki eshik orasi', 'read'),
+    ('bekzod', 'Shum bola', 'read'),
 ]
 
 
@@ -261,6 +340,9 @@ DIARY = [
     ('javohir', 'Sapiens: A Brief History of Humankind', date(2026, 6, 15), date(2026, 7, 3), 5, "Har bir bobi alohida kashfiyot."),
     ('bekzod', 'Crime and Punishment', date(2026, 5, 25), date(2026, 6, 25), 5, "Bir oy davomida sekin, ta'mini his qilib o'qidim."),
     ('bekzod', "O'tkan kunlar", date(2026, 6, 28), date(2026, 7, 5), 5, ''),
+    ('aziza', 'Dunyoning ishlari', date(2026, 7, 3), date(2026, 7, 6), 5, "Onamning sovg'asi bo'lgan kitobni yana bir bor o'qidim."),
+    ('javohir', 'Yulduzli tunlar', date(2026, 6, 20), date(2026, 7, 5), 5, "Juda chuqur ma'noga ega."),
+    ('bekzod', 'Ikki eshik orasi', date(2026, 6, 5), date(2026, 6, 20), 5, "Jurnalistlarning yozish uslubi ajoyib."),
 ]
 
 READING_LISTS = [
