@@ -15,7 +15,7 @@ SECRET_KEY = 'django-insecure-chiw(ej5+f16i-w#9fn_l*cc6d=m^8rr*9i18dpiry@)3i@)v9
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['badiiyat.myjad.uz', 'localhost', '127.0.0.1']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
