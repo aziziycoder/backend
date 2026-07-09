@@ -13,6 +13,8 @@ from books.views import (
 )
 from community.views import (
     AnswerCreateView,
+    BookChallengeView,
+    ChallengeMarkView,
     BookDiaryCreateView,
     BookFavoriteToggleView,
     ListCommentCreateView,
@@ -40,7 +42,15 @@ from community.views import (
     UserShelfView,
     UserStatsView,
 )
-from assistant.views import ChatView
+from assistant.views import (
+    BookQuizView,
+    ChatView,
+    CharacterChatView,
+    ReadingTasteView,
+    ReviewCheckView,
+    ReviewSummaryView,
+    ThreadIdeasView,
+)
 from forum.views import ThreadDetailView, ThreadListCreateView, ThreadPostCreateView
 from users.views import (
     FollowToggleView,
@@ -92,6 +102,8 @@ urlpatterns = [
     path('api/books/<slug:slug>/questions/', BookQuestionListCreateView.as_view()),
     path('api/books/<slug:slug>/diary/', BookDiaryCreateView.as_view()),
     path('api/books/<slug:slug>/favorite/', BookFavoriteToggleView.as_view()),
+    path('api/books/<slug:slug>/challenge/', BookChallengeView.as_view()),
+    path('api/books/<slug:slug>/challenge/mark/', ChallengeMarkView.as_view()),
     path('api/questions/<int:pk>/answers/', AnswerCreateView.as_view()),
 
     # diary & lists
@@ -112,6 +124,12 @@ urlpatterns = [
 
     # AI assistant
     path('api/chat/', ChatView.as_view()),
+    path('api/characters/<int:pk>/chat/', CharacterChatView.as_view()),
+    path('api/books/<slug:slug>/quiz/', BookQuizView.as_view()),
+    path('api/books/<slug:slug>/review-summary/', ReviewSummaryView.as_view()),
+    path('api/books/<slug:slug>/thread-ideas/', ThreadIdeasView.as_view()),
+    path('api/users/<str:username>/taste/', ReadingTasteView.as_view()),
+    path('api/reviews/check/', ReviewCheckView.as_view()),
 
     # forum
     path('api/forums/', ThreadListCreateView.as_view()),

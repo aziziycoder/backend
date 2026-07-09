@@ -6,6 +6,22 @@ from books.models import Book
 User = settings.AUTH_USER_MODEL
 
 
+class ReadingChallenge(models.Model):
+    user = models.ForeignKey(User, related_name='challenges', on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, related_name='challenges', on_delete=models.CASCADE)
+    total_pages = models.PositiveIntegerField()   # tahrirlanadi, default = kitob betlari
+    pages_per_day = models.PositiveIntegerField()  # kuniga necha bet
+    pages_read = models.PositiveIntegerField(default=0)
+    last_marked = models.DateField(null=True, blank=True)  # oxirgi "o'qidim" kuni
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'book')
+
+    def __str__(self):
+        return f'{self.user} — {self.book} ({self.pages_read}/{self.total_pages})'
+
+
 class Review(models.Model):
     user = models.ForeignKey(User, related_name='reviews', on_delete=models.CASCADE)
     book = models.ForeignKey(Book, related_name='reviews', on_delete=models.CASCADE)

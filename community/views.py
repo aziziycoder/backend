@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db.models import Avg, Count
+from django.utils import timezone
 from rest_framework import generics, permissions, status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
@@ -14,6 +15,7 @@ from .models import (
     Favorite,
     ListLike,
     Question,
+    ReadingChallenge,
     ReadingList,
     ReadingListItem,
     Review,
@@ -26,6 +28,7 @@ from .serializers import (
     DiaryEntrySerializer,
     ListCommentSerializer,
     QuestionSerializer,
+    ReadingChallengeSerializer,
     ReadingListDetailSerializer,
     ReadingListSerializer,
     ReviewCommentSerializer,
@@ -36,6 +39,78 @@ from .serializers import (
 User = get_user_model()
 
 
+def _pos_int(value, fallback=0):
+    try:
+        return max(0, int(value))
+    except (TypeError, ValueError):
+        return fallback
+
+
+class BookChallengeView(APIView):
+    """O'qish chaqirig'i: mening chaqirig'im (GET), boshlash (POST), tahrir (PATCH), to'xtatish (DELETE)."""
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def _mine(self, request, slug):
+        if not request.user.is_authenticated:
+            return None
+        return ReadingChallenge.objects.filter(user=request.user, book__slug=slug).first()
+
+    def get(self, request, slug):
+        ch = self._mine(request, slug)
+        return Response(ReadingChallengeSerializer(ch).data if ch else {'challenge': None})
+
+    def post(self, request, slug):
+        book = generics.get_object_or_404(Book, slug=slug)
+        ppd = _pos_int(request.data.get('pages_per_day'))
+        total = _pos_int(request.data.get('total_pages')) or (book.pages or 0)
+        if ppd < 1 or total < 1:
+            return Response({'detail': 'pages_per_day and total_pages must be >= 1.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        ch, _ = ReadingChallenge.objects.update_or_create(
+            user=request.user, book=book,
+            defaults={'pages_per_day': ppd, 'total_pages': total, 'pages_read': 0, 'last_marked': None},
+        )
+        # chaqiriq boshlanganда kitob "o'qiyapman"ga o'tadi
+        ShelfItem.objects.update_or_create(
+            user=request.user, book=book,
+            defaults={'status': ShelfItem.READING, 'started_on': timezone.localdate()},
+        )
+        return Response(ReadingChallengeSerializer(ch).data, status=status.HTTP_201_CREATED)
+
+    def patch(self, request, slug):
+        ch = generics.get_object_or_404(ReadingChallenge, user=request.user, book__slug=slug)
+        if 'pages_per_day' in request.data:
+            ch.pages_per_day = max(1, _pos_int(request.data['pages_per_day'], 1))
+        if 'total_pages' in request.data:
+            ch.total_pages = max(1, _pos_int(request.data['total_pages'], 1))
+            ch.pages_read = min(ch.pages_read, ch.total_pages)
+        ch.save()
+        return Response(ReadingChallengeSerializer(ch).data)
+
+    def delete(self, request, slug):
+        ReadingChallenge.objects.filter(user=request.user, book__slug=slug).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ChallengeMarkView(APIView):
+    """Bugungi kunni "o'qidim" deb belgilash — bir kunda bir marta."""
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, slug):
+        ch = generics.get_object_or_404(ReadingChallenge, user=request.user, book__slug=slug)
+        today = timezone.localdate()
+        if ch.last_marked != today and ch.pages_read < ch.total_pages:
+            ch.pages_read = min(ch.total_pages, ch.pages_read + ch.pages_per_day)
+            ch.last_marked = today
+            ch.save()
+            if ch.pages_read >= ch.total_pages:
+                # tugatilsa kitob "o'qidim"ga o'tadi
+                ShelfItem.objects.update_or_create(
+                    user=request.user, book=ch.book, defaults={'status': ShelfItem.READ}
+                )
+        return Response(ReadingChallengeSerializer(ch).data)
+
+
 class BookReviewListCreateView(generics.ListCreateAPIView):
     serializer_class = ReviewSerializer
 
@@ -43,7 +118,13 @@ class BookReviewListCreateView(generics.ListCreateAPIView):
         return generics.get_object_or_404(Book, slug=self.kwargs['slug'])
 
     def get_queryset(self):
-        return Review.objects.filter(book=self.get_book()).select_related('user', 'book__author')
+        # top taqrizlar tepada: layk + sharh yig'indisi bo'yicha
+        return (
+            Review.objects.filter(book=self.get_book())
+            .annotate(_score=Count('likes', distinct=True) + Count('comments', distinct=True))
+            .select_related('user', 'book__author')
+            .order_by('-_score', '-created_at')
+        )
 
     def perform_create(self, serializer):
         book = self.get_book()

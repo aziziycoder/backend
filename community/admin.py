@@ -5,6 +5,7 @@ from .models import (
     Answer,
     DiaryEntry,
     Question,
+    ReadingChallenge,
     ReadingList,
     ReadingListItem,
     Review,
@@ -19,3 +20,4 @@ admin.site.register(Activity)
 admin.site.register(DiaryEntry)
 admin.site.register(ReadingList)
 admin.site.register(ReadingListItem)
+admin.site.register(ReadingChallenge)

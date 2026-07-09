@@ -1,3 +1,6 @@
+import math
+
+from django.utils import timezone
 from rest_framework import serializers
 
 from books.serializers import BookListSerializer
@@ -8,11 +11,52 @@ from .models import (
     DiaryEntry,
     ListComment,
     Question,
+    ReadingChallenge,
     ReadingList,
     Review,
     ReviewComment,
     ShelfItem,
 )
+
+
+class ReadingChallengeSerializer(serializers.ModelSerializer):
+    book = BookListSerializer(read_only=True)
+    days_total = serializers.SerializerMethodField()
+    days_done = serializers.SerializerMethodField()
+    days_left = serializers.SerializerMethodField()
+    pages_left = serializers.SerializerMethodField()
+    percent = serializers.SerializerMethodField()
+    marked_today = serializers.SerializerMethodField()
+    completed = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ReadingChallenge
+        fields = (
+            'id', 'book', 'total_pages', 'pages_per_day', 'pages_read', 'last_marked',
+            'days_total', 'days_done', 'days_left', 'pages_left', 'percent',
+            'marked_today', 'completed', 'created_at',
+        )
+
+    def get_days_total(self, obj):
+        return math.ceil(obj.total_pages / obj.pages_per_day) if obj.pages_per_day else 0
+
+    def get_days_done(self, obj):
+        return math.ceil(obj.pages_read / obj.pages_per_day) if obj.pages_per_day else 0
+
+    def get_days_left(self, obj):
+        return max(0, self.get_days_total(obj) - self.get_days_done(obj))
+
+    def get_pages_left(self, obj):
+        return max(0, obj.total_pages - obj.pages_read)
+
+    def get_percent(self, obj):
+        return min(100, round(obj.pages_read / obj.total_pages * 100)) if obj.total_pages else 0
+
+    def get_marked_today(self, obj):
+        return obj.last_marked == timezone.localdate()
+
+    def get_completed(self, obj):
+        return obj.pages_read >= obj.total_pages
 
 
 def validate_half_star(value):
